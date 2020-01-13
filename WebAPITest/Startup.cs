@@ -29,7 +29,7 @@ namespace WebAPITest
             services.AddControllers();
 
             services.AddSwaggerGen(options =>
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Get Users in London API", Version = "v1" })
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Get Users", Version = "v1" })
             );
         }
 
@@ -47,8 +47,7 @@ namespace WebAPITest
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Get Users in London API");
-                c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Get Users");
             });
 
             app.UseRouting();
