@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Nancy.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Nancy.Json;
 using WebAPITest.Models;
 
 namespace WebAPITest.Controllers
@@ -13,13 +10,12 @@ namespace WebAPITest.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [Route("api/[controller]/InLondon")]
+        [Route("[controller]/WithinLondon")]
         [HttpGet]
-        public List<User> GetUsersInLondon()
+        public ActionResult<User> GetAllUsersInLondon()
         {
             List<User> users = null;
-            HttpWebRequest request = (HttpWebRequest) WebRequest.Create("https://bpdts-test-app.herokuapp.com/city/London/users");
-
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://bpdts-test-app.herokuapp.com/city/London/users");
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -33,38 +29,53 @@ namespace WebAPITest.Controllers
 
                 var serializer = new JavaScriptSerializer();
                 users = serializer.Deserialize<List<User>>(responseStream);
+                List<User> usersWithinRange = GetUserWithinRange(50);
+
+                usersWithinRange.ForEach(u => users.Add(u));
+
+                return Ok(users);
             }
-         
-            return users;
+
+            else if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return NotFound();
+            }
+
+            else if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
         }
 
-        [Route("api/[controller]/WithinDistance")]
-        [HttpGet]
-        public List<User> GetUserWithinRange()
+        private List<User> GetUserWithinRange(int distance)
         {
-            const int Distance = 50;
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://bpdts-test-app.herokuapp.com/users");
-
-            WebResponse response = request.GetResponse();
-            string responseStream;
-
-            using (var streamReader = new StreamReader(response.GetResponseStream()))
-            {
-                responseStream = streamReader.ReadToEnd();
-            }
-
-            var serializer = new JavaScriptSerializer();
-            var users = serializer.Deserialize<List<User>>(responseStream);
-            
             List<User> filteredUsers = new List<User>();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://bpdts-test-app.herokuapp.com/users");
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-            foreach (User user in users)
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                if (user.IsWithinDistance(user.latitude, user.longitude, Distance))
+                string responseStream;
+
+                using (var streamReader = new StreamReader(response.GetResponseStream()))
                 {
-                    filteredUsers.Add(user);
+                    responseStream = streamReader.ReadToEnd();
                 }
+
+                var serializer = new JavaScriptSerializer();
+                var users = serializer.Deserialize<List<User>>(responseStream);
+
+                foreach (User user in users)
+                {
+                    if (user.IsWithinDistance(user.latitude, user.longitude, distance))
+                    {
+                        filteredUsers.Add(user);
+                    }
+                }
+
+                return filteredUsers;
             }
 
             return filteredUsers;
