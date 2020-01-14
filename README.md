@@ -2,7 +2,7 @@
 
 Test API which pulls user data from another API and returns a list of users who are listed as either living in London, or whose current coordinates are within 50 miles of London.
 
-The approach is to get the users who are listed as living in London by perfoming a GET requesting specifying the "city" parameter.
+The approach is to get the users who are listed as living in London by perfoming a GET request specifying the "city" parameter.
 Next step is to get all the user from the API.
 
 Now need to find out which coordinates fall within the distance of 50 miles from London. For this I've used Haversine Formula to calculate the distance between two points. 
