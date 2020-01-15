@@ -2,6 +2,8 @@
 
 Test API which pulls user data from another API and returns a list of users who are listed as either living in London, or whose current coordinates are within 50 miles of London.
 
+Path - /WithinLondon
+
 The approach is to get the users who are listed as living in London by perfoming a GET request specifying the "city" parameter.
 Next step is to get all the user from the API.
 
@@ -12,3 +14,11 @@ Given that Latitude and longitude coordinates of London are: 51.509865, -0.11809
 Finally merge the users who are listed as living in London and users whose coordinates are within 50 miles of London.
 
 Return the users.
+
+Other Get requests implemented as follows:
+
+  /AllUsers - returns all the users
+  
+  /User/{id} - returns a user by id
+  
+  /Users/{city} - returns users who are listed as living in the specified city
