@@ -3,7 +3,9 @@ using Nancy.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using WebAPITest.Models;
 
 namespace WebAPITest.Controllers
@@ -43,7 +45,7 @@ namespace WebAPITest.Controllers
             catch (Exception ex)
             {
                 
-                return NotFound();
+                return BadRequest();
             }
 
             return NoContent();
@@ -118,7 +120,7 @@ namespace WebAPITest.Controllers
             catch (Exception ex)
             {
 
-                return NotFound();
+                return BadRequest();
             }
 
             return NoContent();
@@ -126,7 +128,7 @@ namespace WebAPITest.Controllers
 
         [Route("/User/{id}")]
         [HttpGet]
-        public ActionResult<User> GetUserById(int id)
+        public ActionResult<User> GetUserById(string id)
         {
             try
             {
@@ -153,7 +155,7 @@ namespace WebAPITest.Controllers
             catch (Exception ex)
             {
 
-                return NotFound();
+                return NotFound("Id '" + id + "' doesn't exist. You have requested this URI [/User/" + id + "] but did you mean /user/<string:id> or /AllUsers ?");
             }
 
             return NoContent();
@@ -163,6 +165,7 @@ namespace WebAPITest.Controllers
         [HttpGet]
         public ActionResult<User> GetUsersByCity(string city)
         {
+
             try
             {
                 List<User> users = null;
@@ -188,7 +191,7 @@ namespace WebAPITest.Controllers
             catch (Exception ex)
             {
 
-                return NotFound();
+                return NotFound("City '" + city + "' doesn't exist. You have requested this URI [/Users/" + city + "]");
             }
 
             return NoContent();
