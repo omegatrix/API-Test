@@ -16,6 +16,9 @@ Finally merge the users who are listed as living in London and users whose coord
 Return the users.
 
 Other Get requests implemented as follows:
-/AllUsers - returns all the users
-/User/{id} - returns a user by id
-/Users/{city} - returns users who are listed as living in the specified city
+
+  /AllUsers - returns all the users
+  
+  /User/{id} - returns a user by id
+  
+  /Users/{city} - returns users who are listed as living in the specified city
