@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Nancy.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using WebAPITest.Models;
 
 namespace WebAPITest.Controllers
@@ -32,8 +30,7 @@ namespace WebAPITest.Controllers
                         responseStream = streamReader.ReadToEnd();
                     }
 
-                    var serializer = new JavaScriptSerializer();
-                    users = serializer.Deserialize<List<User>>(responseStream);
+                    users = JsonConvert.DeserializeObject<List<User>>(responseStream);
                     List<User> usersWithinRange = GetUserWithinRange(50);
 
                     usersWithinRange.ForEach(u => users.Add(u));
@@ -70,8 +67,7 @@ namespace WebAPITest.Controllers
                         responseStream = streamReader.ReadToEnd();
                     }
 
-                    var serializer = new JavaScriptSerializer();
-                    var users = serializer.Deserialize<List<User>>(responseStream);
+                    var users = JsonConvert.DeserializeObject<List<User>>(responseStream);
 
                     foreach (User user in users)
                     {
@@ -110,8 +106,7 @@ namespace WebAPITest.Controllers
                         responseStream = streamReader.ReadToEnd();
                     }
 
-                    var serializer = new JavaScriptSerializer();
-                    users = serializer.Deserialize<List<User>>(responseStream);
+                    users = JsonConvert.DeserializeObject<List<User>>(responseStream);
                    
                     return Ok(users);
                 }
@@ -145,8 +140,7 @@ namespace WebAPITest.Controllers
                         responseStream = streamReader.ReadToEnd();
                     }
 
-                    var serializer = new JavaScriptSerializer();
-                    user = serializer.Deserialize<User>(responseStream);
+                    user = JsonConvert.DeserializeObject<User>(responseStream);
 
                     return Ok(user);
                 }
@@ -181,8 +175,7 @@ namespace WebAPITest.Controllers
                         responseStream = streamReader.ReadToEnd();
                     }
 
-                    var serializer = new JavaScriptSerializer();
-                    users = serializer.Deserialize<List<User>>(responseStream);
+                    users = JsonConvert.DeserializeObject<List<User>>(responseStream);
 
                     return Ok(users);
                 }
