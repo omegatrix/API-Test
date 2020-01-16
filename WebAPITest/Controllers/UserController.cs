@@ -13,6 +13,7 @@ namespace WebAPITest.Controllers
     {
         [Route("/WithinLondon")]
         [HttpGet]
+        [Produces("application/json")]
         public ActionResult<User> GetAllUsersInLondon()
         {
             try
@@ -89,6 +90,7 @@ namespace WebAPITest.Controllers
 
         [Route("/AllUsers")]
         [HttpGet]
+        [Produces("application/json")]
         public ActionResult<User> GetUsers()
         {
             try
@@ -123,12 +125,13 @@ namespace WebAPITest.Controllers
 
         [Route("/User/{id}")]
         [HttpGet]
+        [Produces("application/json")]
         public ActionResult<User> GetUserById(string id)
         {
             try
             {
                 User user = null;
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://bpdts-test-app.herokuapp.com/user/" + id.ToString());
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://bpdts-test-app.herokuapp.com/user/{id}");
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -149,7 +152,7 @@ namespace WebAPITest.Controllers
             catch (Exception ex)
             {
 
-                return NotFound("Id '" + id + "' doesn't exist. You have requested this URI [/User/" + id + "] but did you mean /user/<string:id> or /AllUsers ?");
+                return NotFound($"Id '{id}' doesn't exist. You have requested this URI [/User/{id}] but did you mean /User/<string:id> or /AllUsers ?");
             }
 
             return NoContent();
@@ -157,13 +160,14 @@ namespace WebAPITest.Controllers
 
         [Route("/Users/{city}")]
         [HttpGet]
+        [Produces("application/json")]
         public ActionResult<User> GetUsersByCity(string city)
         {
 
             try
             {
                 List<User> users = null;
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://bpdts-test-app.herokuapp.com/city/"+ city + "/users");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://bpdts-test-app.herokuapp.com/city/{city}/users");
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -184,7 +188,7 @@ namespace WebAPITest.Controllers
             catch (Exception ex)
             {
 
-                return NotFound("City '" + city + "' doesn't exist. You have requested this URI [/Users/" + city + "]");
+                return NotFound($"City '{city}' doesn't exist. You have requested this URI [/Users/{city}]");
             }
 
             return NoContent();
