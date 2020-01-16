@@ -19,4 +19,4 @@
   
   **/User/{id} - returns a user by id**
   
-  **/Users/{city} - returns users who are listed as living in the specified city**
+  **/Users/{city} - returns the users who are listed as living in the specified city**
